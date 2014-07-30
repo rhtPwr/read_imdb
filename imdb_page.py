@@ -96,14 +96,15 @@ if searchMovie:
   year = 0
   #print "Split cuts =", len(cuts), "\n"
   if len(cuts) > 1:
-    year = (re.findall(r'\d+',cuts[1]))
-    print "Movie year :", year[0], "\n"
+    year = (re.search(r'\d+',cuts[1]))
+    year = int(year.group(0))
+    print "Movie year :", year, "\n"
   for item in title_list:
     count += 1
     if item.has_key('year'):
       print count, " - ", item['title'], " - ", item['year']
-      if int(year[0]) == int(item['year']):
-        selected = count - 1
+      if (year != 0) & (year == int(item['year'])):
+        selected = count
         year_matched = 1
         break
     else:
