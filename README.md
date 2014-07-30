@@ -9,7 +9,7 @@ Has two files:
               imdb.cmd file needs to be modified based on where you have put the imdb_page.py script
               This allows a file name to be given to imdb_page.py script by right clicking the file name and "sendto" imdb.cmd
               
-2) imdb_page.py - Python script that uses IMDbPY library to query information for the input provided "right click" on file and "sendto" imdb.cmd
+2) imdb_page.py - Python script that uses IMDbPY library to query information for the input provided by - "right click" on                    file and "sendto" imdb.cmd
                   Ask user to provide input based on data needed for that particular file.
                   Inputs supported: 
                               P : Plot
