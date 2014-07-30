@@ -4,6 +4,7 @@ import sys
 import re   # for split using multiple delimiters
 import imdb   # IMDBPY lib
 import msvcrt 
+from imdb import IMDb, IMDbError
 
 #get keypress character
 def get_char():
@@ -22,14 +23,14 @@ def get_details (movie):
   "Print the specified details of the given movie"
   print movie['title']
   url = "http://www.imdb.com/title/tt" + movie.movieID + "/"
-  print "Input your option: \
-               P : Plot \
-               C : Cast \
-               R : Rating \
-               D : Director \
-               T : Runtime \
-               W : Web Page \
-               E : Exit \n"
+  print "Input your option: \n\r\
+P : Plot,  \
+C : Cast,  \
+R : Rating,  \
+D : Director,  \
+T : Runtime,  \
+W : Web Page,  \
+E : Exit \n"
   #usr_input = raw_input()
   usr_input = get_char()
   print "input = ", usr_input
@@ -66,9 +67,10 @@ def get_details (movie):
 
   return
 
+#main()
 query = sys.argv[1]
 #query = "Two and Half Men - Season 2 - ep  (3)"
-#query = "chennai express"
+#query = "safe house - 1998"
 
 #split on "\" or "/" to get full title(file) name
 cuts_full = query.split('\\')
@@ -89,12 +91,25 @@ searchMovie = re.search( r'movie',kind)
 if searchMovie:
   #print title_first, "is a movie\n"
   #print every movie retuend by search_movie
-  count = 1
+  count = 0
+  year_matched = 0
+  year = 0
+  #print "Split cuts =", len(cuts), "\n"
+  if len(cuts) > 1:
+    year = (re.findall(r'\d+',cuts[1]))
+    print "Movie year :", year[0], "\n"
   for item in title_list:
-    print count, " - ", item['title'], " - ", item['year']
     count += 1
-
-  selected = raw_input('Enter the movie number from the list - ')
+    if item.has_key('year'):
+      print count, " - ", item['title'], " - ", item['year']
+      if int(year[0]) == int(item['year']):
+        selected = count - 1
+        year_matched = 1
+        break
+    else:
+      print count, " - ", item['title']
+  if (not year_matched):
+    selected = raw_input('Enter the movie number from the list - ')
   e = title_list[int(selected) - 1]
   access.update(e)
   get_details(e)
@@ -103,7 +118,6 @@ else:
   #print len(cuts)
   if len(cuts) < 2:
     print "File name does not have Season or Episode details <name> - <season> - <ep>\n"
-
   season = re.findall(r'\d+', cuts[1])
   ep = re.findall(r'\d+',cuts[2])
   #print "Season -", season, " Ep -", ep, "\n"
